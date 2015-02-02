@@ -1,8 +1,6 @@
 package com.example.android.sunshine;
 
-import android.app.AlertDialog;
-import android.app.DialogFragment;
-import android.content.DialogInterface;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -10,7 +8,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -23,7 +20,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -40,7 +36,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static android.os.AsyncTask.execute;
 
 /**
 * Created by Vismay on 12/27/2014.
@@ -87,12 +82,17 @@ public String formatHighLow(double high,double low) {
         high=(high*1.8)+32;
         low=(low*1.8)+32;
 
-    }else if(!unitType.equals(getString(R.string.pref_units_metric))){
+    }
+//    else{
+//        high=high;
+//        low=low;
+//    }
+    else if(!unitType.equals(getString(R.string.pref_units_metric))){
             Log.d("yo","Unit type not found:"+unitType);
                 }
     long roundedHigh = Math.round(high);
     long roundedLow=Math.round(low);
-    String highLowStr=roundedHigh+"/"+roundedHigh;
+    String highLowStr=roundedHigh+"-"+roundedLow;
     return highLowStr;
 }
 @Override
@@ -195,6 +195,8 @@ public View onCreateView(LayoutInflater inflater, ViewGroup container,
             String forecast=weekforecastAdapter.getItem(position);
             Intent detail_intent = new Intent(getActivity(), DetalActivity.class).putExtra(Intent.EXTRA_TEXT,forecast);
             startActivity(detail_intent);
+
+
         }
     });
     return rootView;
@@ -313,7 +315,7 @@ final String DAYS_PARAM = "cnt";
         // Because the API returns a unix timestamp (measured in seconds),
         // it must be converted to milliseconds in order to be converted to valid date.
         Date date = new Date(time * 1000);
-        SimpleDateFormat format = new SimpleDateFormat("E, MMM d");
+        SimpleDateFormat format = new SimpleDateFormat("E MMM d");
         return format.format(date).toString();
     }
 
@@ -325,7 +327,7 @@ final String DAYS_PARAM = "cnt";
         long roundedHigh = Math.round(high);
         long roundedLow = Math.round(low);
 
-        String highLowStr = roundedHigh + "/" + roundedLow;
+        String highLowStr = roundedHigh + "-" + roundedLow;
         return highLowStr;
     }
 
@@ -347,7 +349,8 @@ final String DAYS_PARAM = "cnt";
         final String OWM_MIN = "min";
         final String OWM_DATETIME = "dt";
         final String OWM_DESCRIPTION = "main";
-
+        final String OWN_HUMIDITY="humidity";
+        final String OWN_PRESSURE="pressure";
         JSONObject forecastJson = new JSONObject(forecastJsonStr);
         JSONArray weatherArray = forecastJson.getJSONArray(OWM_LIST);
         Log.d(TAG,""+weatherArray);
@@ -357,7 +360,8 @@ final String DAYS_PARAM = "cnt";
             String day;
             String description;
             String highAndLow;
-
+            String humidity;
+            String pressure;
             // Get the JSON object representing the day
             JSONObject dayForecast = weatherArray.getJSONObject(i);
 
@@ -367,6 +371,10 @@ final String DAYS_PARAM = "cnt";
             long dateTime = dayForecast.getLong(OWM_DATETIME);
             day = getReadableDateString(dateTime);
 
+            int humid=dayForecast.getInt(OWN_HUMIDITY);
+            humidity=humid+"";
+            double pressure_json=dayForecast.getDouble(OWN_PRESSURE);
+            pressure=pressure_json+"";
             // description is in a child array called "weather", which is 1 element long.
             JSONObject weatherObject = dayForecast.getJSONArray(OWM_WEATHER).getJSONObject(0);
             description = weatherObject.getString(OWM_DESCRIPTION);
@@ -378,7 +386,7 @@ final String DAYS_PARAM = "cnt";
             double low = temperatureObject.getDouble(OWM_MIN);
             Log.d(TAG,"value of high is"+high);
             highAndLow = formatHighLows(high, low);
-            resultStrs[i] = day + " - " + description + " - " + highAndLow;
+            resultStrs[i] = day + " - " + description + " - " + highAndLow+" - "+humidity+" - "+pressure;
         }
         for(String s: resultStrs){
             Log.d("yo","Forecast entry"+s);

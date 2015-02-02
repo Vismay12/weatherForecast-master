@@ -9,7 +9,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.util.HashMap;
 
 
 public class DetalActivity extends ActionBarActivity {
@@ -55,20 +58,64 @@ public class DetalActivity extends ActionBarActivity {
      */
     public static class PlaceholderFragment extends Fragment {
 
+        private ImageView mIconView;
+        private TextView mFriendlyDateView;
+        private TextView mDateView;
+        private TextView mDescriptionView;
+        private TextView mHighTempView;
+        private TextView mLowTempView;
+        private TextView mHumidityView;
+        private TextView mWindView;
+        private TextView mPressureView;
+
         public PlaceholderFragment() {
+            setHasOptionsMenu(true);
         }
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_detal, container, false);
+
+
             Intent intent = getActivity().getIntent();
             String forecast = intent.getStringExtra(Intent.EXTRA_TEXT);
-            TextView hello=(TextView)rootView.findViewById(R.id.hello_view);
-            hello.setText(forecast);
+           // TextView hello=(TextView)rootView.findViewById(R.id.hello_view);
+            String[] parts = forecast.split("-");
 
-            
+            //hello.setText(forecast);
+            mIconView = (ImageView) rootView.findViewById(R.id.detail_icon);
+            //String cloud="Clouds";
+            HashMap<String,Integer> picMap = new HashMap<>();
+            picMap.put("Clouds",R.drawable.art_clouds);
+            picMap.put("Rain",R.drawable.art_rain);
+            picMap.put("Fog",R.drawable.art_fog);
+            picMap.put("Snow",R.drawable.art_snow);
+            picMap.put("Clear",R.drawable.art_clear);
+            picMap.put("Storm",R.drawable.art_storm);
+
+            //String key=parts[1];
+
+                mIconView.setImageDrawable(getResources().getDrawable(picMap.get("Clouds")));
+
+            mDateView = (TextView) rootView.findViewById(R.id.detail_date_textview);
+            mDateView.setText(parts[0]);
+
+            mFriendlyDateView = (TextView) rootView.findViewById(R.id.detail_day_textview);
+            //mFriendlyDateView.setText(parts[0]);
+            mDescriptionView = (TextView) rootView.findViewById(R.id.detail_forecast_textview);
+            //mDescriptionView.setText(parts[2]);
+            mHighTempView = (TextView) rootView.findViewById(R.id.detail_high_textview);
+            mHighTempView.setText(parts[2]);
+            mLowTempView = (TextView) rootView.findViewById(R.id.detail_low_textview);
+            mLowTempView.setText(parts[3]);
+            mHumidityView = (TextView) rootView.findViewById(R.id.detail_humidity_textview);
+            mHumidityView.setText(parts[4]);
+            mWindView = (TextView) rootView.findViewById(R.id.detail_wind_textview);
+            mPressureView = (TextView) rootView.findViewById(R.id.detail_pressure_textview);
+            mPressureView.setText(parts[5]);
             return rootView;
+            
         }
     }
 }
