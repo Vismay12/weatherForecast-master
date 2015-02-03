@@ -118,40 +118,6 @@ public boolean onOptionsItemSelected(MenuItem item) {
 
         return true;
     }
-//    if(id==R.id.addLocation)
-//    {
-//        // Create new fragment and transaction
-//        Fragment newFragment = new LocationEntryFragment();
-//        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-//
-//// Replace whatever is in the fragment_container view with this fragment,
-//// and add the transaction to the back stack
-//        transaction.replace(R.id.container, newFragment);
-//        transaction.addToBackStack(null);
-//
-//// Commit the transaction
-//        transaction.commit();
-//        //String value;
-
-//        final AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
-//        final EditText input = new EditText(getActivity());
-//        alert.setView(input);
-//        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-//            public void onClick(DialogInterface dialog, int whichButton) {
-//                value = input.getText().toString().trim();
-//                Log.d("value from alert",value);
-//                updateweather(value);
-//            }
-//        });
-//
-//        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-//            public void onClick(DialogInterface dialog, int whichButton) {
-//                dialog.cancel();
-//            }
-//        });
-//        alert.show();
-//    }
-//
     return super.onOptionsItemSelected(item);
 }
 
@@ -179,12 +145,8 @@ public View onCreateView(LayoutInflater inflater, ViewGroup container,
         }
     });
     List<String> weekforecast = new ArrayList<String>();
-    weekforecast.add("Today--Sunny-- 88/63");
-    weekforecast.add("Tomorrow--Foggy-- 20/46");
-    weekforecast.add("Weds--Cloudy-- 72/63");
-    weekforecast.add("Thurs--Rainy-- 64/51");
-    weekforecast.add("Fri--Foggy-- 70/46");
-    weekforecast.add("Sat--Sunny-- 76/68");
+
+    weekforecast.add(null);
     weekforecastAdapter = new ArrayAdapter<String>(getActivity(), R.layout.list_item_forecast, R.id.list_item_forecast_textview, weekforecast);
    // EditText input = (EditText)getActivity().findViewById(R.id.locationText);
     ListView view_list = (ListView) rootView.findViewById(R.id.listview_forecast);
@@ -399,6 +361,7 @@ final String DAYS_PARAM = "cnt";
     @Override
     protected void onPostExecute(String[] strings) {
         super.onPostExecute(strings);
+
         if(strings!=null)   {
             weekforecastAdapter.clear();
             for(String dayForecastStr:strings){

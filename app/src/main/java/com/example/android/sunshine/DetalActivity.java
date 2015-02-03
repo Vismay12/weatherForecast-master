@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.HashMap;
+import java.util.Set;
 
 
 public class DetalActivity extends ActionBarActivity {
@@ -93,10 +94,10 @@ public class DetalActivity extends ActionBarActivity {
             picMap.put("Snow",R.drawable.art_snow);
             picMap.put("Clear",R.drawable.art_clear);
             picMap.put("Storm",R.drawable.art_storm);
+            Set<String> keys = picMap.keySet();
 
-            //String key=parts[1];
-
-                mIconView.setImageDrawable(getResources().getDrawable(picMap.get("Clouds")));
+            String key=parts[1].toString().trim();
+            mIconView.setImageDrawable(getResources().getDrawable(picMap.get(key)));
 
             mDateView = (TextView) rootView.findViewById(R.id.detail_date_textview);
             mDateView.setText(parts[0]);
@@ -104,16 +105,16 @@ public class DetalActivity extends ActionBarActivity {
             mFriendlyDateView = (TextView) rootView.findViewById(R.id.detail_day_textview);
             //mFriendlyDateView.setText(parts[0]);
             mDescriptionView = (TextView) rootView.findViewById(R.id.detail_forecast_textview);
-            //mDescriptionView.setText(parts[2]);
+            mDescriptionView.setText(parts[1]);
             mHighTempView = (TextView) rootView.findViewById(R.id.detail_high_textview);
-            mHighTempView.setText(parts[2]);
+            mHighTempView.setText("Max:"+parts[2]);
             mLowTempView = (TextView) rootView.findViewById(R.id.detail_low_textview);
-            mLowTempView.setText(parts[3]);
+            mLowTempView.setText("Min:"+parts[3]);
             mHumidityView = (TextView) rootView.findViewById(R.id.detail_humidity_textview);
-            mHumidityView.setText(parts[4]);
+            mHumidityView.setText("Humidity:"+parts[4]);
             mWindView = (TextView) rootView.findViewById(R.id.detail_wind_textview);
             mPressureView = (TextView) rootView.findViewById(R.id.detail_pressure_textview);
-            mPressureView.setText(parts[5]);
+            mPressureView.setText("Pressure:"+parts[5]);
             return rootView;
             
         }
